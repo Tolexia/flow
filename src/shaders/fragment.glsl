@@ -1,21 +1,16 @@
-// precision mediump float;
-
-uniform vec3 uColor;
-uniform sampler2D uTexture;
-
-// varying float vRandom;
-varying vec2 vUv;
-varying float vElevation;
-
 
 void main()
 {
 
-    // vec4 textureColor = texture2D(uTexture, vUv);
-    // textureColor.rgb *= vElevation * 1.5 + 0.75;
-    vec4 cyan = vec4(0.0, 1.0, 1.0, 1.0);
+    vec3 cyan = vec3(0.0, 1.0, 1.0);
+
+    float strength = distance(gl_PointCoord, vec2(0.5));
+    strength *= 2.0;
+    strength = 1.0 - strength;
     
-    gl_FragColor = cyan;
-    // gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);
+    vec3 color = mix(vec3(0.0), cyan, strength);
+    gl_FragColor = vec4(color, 1.0);
+
+     #include <colorspace_fragment>
 
 }

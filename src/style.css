@@ -37,11 +37,9 @@ body
     padding-left: 10%;
     padding-right: 10%;
 }
-/* .section:first-child{
-    height: 100vh;
-} */
+
 h1, h2{
-    color: rgba(255, 255, 255, 0.305);
+    color: rgba(255, 255, 255, 0.064);
     font-size: calc(100lvw / 6);
     position: absolute;
     top: 50%;
