@@ -1,6 +1,11 @@
 # Three.js Journey
 
-Having fun with Fragment Shaders
+Having fun with Vertex Shader
+
+![](./preview.png)
+
+[Live demo here](https://tolexia.github.io/flow/) 
+
 
 ## Setup
 Download [Node.js](https://nodejs.org/en/download/).
