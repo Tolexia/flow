@@ -26,35 +26,48 @@ const particleTexture = textureLoader.load('/textures/particles/6.png')
  * Particles
  */
 // Geometry
-// const particlesGeometry = new THREE.SphereGeometry(1, 32, 32)
-const geometry = new THREE.PlaneGeometry(3, 3, 512, 512)
-const material = new THREE.ShaderMaterial({
-    vertexShader: vertexShader,
-    fragmentShader: fragmentShader,
-    transparent:true,
-    uniforms:
-    {
-        uFrequency: { value: new THREE.Vector2(10, 5) },
-        uTime: { value: 0 },
-        uColor: { value: new THREE.Color('orange') },
-        uTexture: { value: particleTexture }
-    }
-})
-const mesh = new THREE.Mesh(geometry, material)
-mesh.rotateX(Math.PI / 2)
-scene.add(mesh)
+// const geometry = new THREE.PlaneGeometry(3, 3, 512, 512)
+// const material = new THREE.ShaderMaterial({
+//     vertexShader: vertexShader,
+//     fragmentShader: fragmentShader,
+//     transparent:true,
+//     uniforms:
+//     {
+//         uFrequency: { value: new THREE.Vector2(10, 5) },
+//         uTime: { value: 0 },
+//         uColor: { value: new THREE.Color('orange') },
+//         uTexture: { value: particleTexture }
+//     }
+// })
+// const mesh = new THREE.Mesh(geometry, material)
+// mesh.rotateX(Math.PI / 2)
+// scene.add(mesh)
+
+const particlesGeometry = new THREE.BufferGeometry()
+const count = 20000
+
+const positions = new Float32Array(count * 3) // Multiply by 3 because each position is composed of 3 values (x, y, z)
+
+for(let i = 0; i < count * 3; i++) // Multiply by 3 for same reason
+{
+    positions[i] = (Math.random() - 0.5) * 10 // Math.random() - 0.5 to have a random value between -0.5 and +0.5
+}
+
+particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
 
 // // Material
-// const particlesMaterial = new THREE.PointsMaterial({
-//     size: 0.02,
-//     sizeAttenuation: true
-// })
-// particlesMaterial.size = 0.1
-// particlesMaterial.color = new THREE.Color('cyan') //  Will affect vertex colors by color attribute anyways
-// particlesMaterial.transparent = true
-// particlesMaterial.alphaMap = particleTexture
-// particlesMaterial.depthWrite  = false
-// particlesMaterial.blending = THREE.AdditiveBlending
+const particlesMaterial = new THREE.PointsMaterial({
+    size: 0.02,
+    sizeAttenuation: true
+})
+particlesMaterial.size = 0.1
+particlesMaterial.color = new THREE.Color('cyan') //  Will affect vertex colors by color attribute anyways
+particlesMaterial.transparent = true
+particlesMaterial.alphaMap = particleTexture
+particlesMaterial.depthWrite  = false
+particlesMaterial.blending = THREE.AdditiveBlending
+const particles = new THREE.Points(particlesGeometry, particlesMaterial)
+scene.add(particles)
 
 /**
  * Sizes
@@ -106,7 +119,16 @@ let previousTick
 const tick = () =>
 {
     const elapsedTime = clock.getElapsedTime()
-    material.uniforms.uTime.value = elapsedTime
+    // material.uniforms.uTime.value = elapsedTime
+    // Animating particles
+    for(let i = 0; i < count; i++)
+    {
+        const i3 = i * 3
+
+        const x = particlesGeometry.attributes.position.array[i3]
+        particlesGeometry.attributes.position.array[i3 + 1] = Math.tan(elapsedTime + x)
+    }
+    particlesGeometry.attributes.position.needsUpdate = true 
 
     // Render
     renderer.render(scene, camera)
