@@ -27,7 +27,7 @@ const particleTexture = textureLoader.load('/textures/particles/6.png')
  */
 // Geometry
 // const particlesGeometry = new THREE.SphereGeometry(1, 32, 32)
-const geometry = new THREE.PlaneGeometry(1, 1, 32, 32)
+const geometry = new THREE.PlaneGeometry(3, 3, 512, 512)
 const material = new THREE.ShaderMaterial({
     vertexShader: vertexShader,
     fragmentShader: fragmentShader,
@@ -37,7 +37,7 @@ const material = new THREE.ShaderMaterial({
         uFrequency: { value: new THREE.Vector2(10, 5) },
         uTime: { value: 0 },
         uColor: { value: new THREE.Color('orange') },
-        // uTexture: { value: flagTexture }
+        uTexture: { value: particleTexture }
     }
 })
 const mesh = new THREE.Mesh(geometry, material)
